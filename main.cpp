@@ -17,7 +17,7 @@ int main() {
 
     //Audio namexsource
     //Key: name, Value: path
-    std::map<std::string, std::string> audioFiles = {
+    std::map<std::string, std::string> audioNameXFiles = {
         { "l", "D:/Repositories/SoundManager/sounds/15727__blackstrobe__l.wav"},
         { "f", "D:/Repositories/SoundManager/sounds/15721__blackstrobe__f.wav"},
         { "g", "D:/Repositories/SoundManager/sounds/15722__blackstrobe__g.wav"},
@@ -27,23 +27,35 @@ int main() {
         { "k", "D:/Repositories/SoundManager/sounds/15726__blackstrobe__k.wav"}
     };
 
-    _soundLoader.loadWavFiles( audioFiles );
+    _soundLoader.loadWavFiles( audioNameXFiles );
 
     _soundLoader.addSource( "EFFECTS" );
     _soundLoader.addSource( "AMBIENT" );
     _soundLoader.addSource( "MICROFONE" );
     _soundLoader.addSource( "RADIO" );
 
-    _soundLoader.setSoundQueue( "RADIO", { "n", "t", "l" } );
+    _soundLoader.setSourceSounds( "EFFECTS", { "l", "4", "4" } );
+
+    _soundLoader.setSourceSounds( "RADIO", { "n", "t", "l" } );
     _soundLoader.setPitch( "RADIO", 0.75f );
     _soundLoader.setLoop( "RADIO", true );
     _soundLoader.play( "RADIO" );
 
     int i = 0;
-    int count = 60*10; //10 seconds to stop
+    int count = 60*5; //5 seconds to stop
+
+    bool secondStarted = false;
     while(true)
     {
+
+
+        if( i > 60 && !secondStarted )
+        {   std::cout << "i: " << i << std::endl;
+            _soundLoader.play( "EFFECTS" );
+            secondStarted = true;
+        }
 //        std::cout << "isPlaying? " << _soundLoader.isPlaying( "RADIO" ) << std::endl;
+        _soundLoader.update();
 
         if( i == count ) break;
         i++;

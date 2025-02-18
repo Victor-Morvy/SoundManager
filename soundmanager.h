@@ -25,31 +25,12 @@ public:
     WavData* wavData( const std::string& soundName );
 
     DataSource* addSource( const std::string& sourceName );
-    DataSource* getSource( const std::string& sourceName )
-    {
-        try {
-            return _dataSourceMap.at( sourceName ).get();
-        } catch (...) {
-        }
-        return nullptr;
-    }
+    DataSource* getSource( const std::string& sourceName );
+
+    void update(); //update to reorganize the source buffer with multiple sounds
 
     //sequence play sound in source buffer
-    void setSoundQueue( const std::string& sourceName, const std::vector< std::string >& soundsName )
-    {
-        std::vector<WavData*> wavDataVector;
-
-        for( const auto& name : soundsName )
-        {
-            auto* tmpWavData = wavData( name );
-            if( tmpWavData )
-                wavDataVector.push_back( tmpWavData );
-            else
-                std::cerr << name << " sound doesn't exist." << std::endl;
-        }
-
-        _dataSourceMap.at( sourceName )->setWavQueueData( wavDataVector );
-    };
+    void setSourceSounds( const std::string& sourceName, const std::vector< std::string >& soundsName );;
 
     void setVolume( const std::string& sourceName, float volume );
     float volume( const std::string& sourceName );
@@ -63,7 +44,6 @@ public:
     void play( const std::string& sourceName );
     void stop( const std::string& sourceName );
     bool isPlaying( const std::string& sourceName );
-
 
 private:
     void openDevice();

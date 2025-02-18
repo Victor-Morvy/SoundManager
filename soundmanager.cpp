@@ -191,6 +191,53 @@ DataSource *SoundManager::addSource(const std::string& sourceName)
     return _dataSourceMap[sourceName].get();
 }
 
+DataSource *SoundManager::getSource(const std::string &sourceName)
+{
+    try {
+        return _dataSourceMap.at( sourceName ).get();
+    } catch (...) {
+    }
+    return nullptr;
+}
+
+void SoundManager::update()
+{
+    for( auto& sourceP : _dataSourceMap )
+    {
+        if( !sourceP.second->loop() )
+            continue;
+
+        auto source = sourceP.second->source();
+        ALint processedBuffers;
+        alGetSourcei(source, AL_BUFFERS_PROCESSED, &processedBuffers);
+
+        if (processedBuffers > 0) {
+            // Remove os buffers processados da fila
+            std::vector<ALuint> processed(processedBuffers);
+            alSourceUnqueueBuffers(source, processedBuffers, processed.data());
+
+            // Reenfileira os buffers processados para repetir a sequência
+            alSourceQueueBuffers(source, processedBuffers, processed.data());
+        }
+    }
+}
+
+void SoundManager::setSourceSounds(const std::string &sourceName, const std::vector<std::string> &soundsName)
+{
+    std::vector<WavData*> wavDataVector;
+
+    for( const auto& name : soundsName )
+    {
+        auto* tmpWavData = wavData( name );
+        if( tmpWavData )
+            wavDataVector.push_back( tmpWavData );
+        else
+            std::cerr << name << " sound doesn't exist." << std::endl;
+    }
+
+    _dataSourceMap.at( sourceName )->setWavQueueData( wavDataVector );
+}
+
 void SoundManager::setVolume(const std::string &sourceName, float volume)
 {
     _dataSourceMap.at( sourceName )->setVolume( volume );
