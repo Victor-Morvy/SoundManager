@@ -27,6 +27,11 @@ int main() {
         { "k", "D:/Repositories/SoundManager/sounds/15726__blackstrobe__k.wav"}
     };
 
+    for( auto&[i, j] : audioNameXFiles )
+    {
+        std::cout << "i :" << i << " j: " << j;
+    }
+
     _soundLoader.loadWavFiles( audioNameXFiles );
 
     _soundLoader.addSource( "EFFECTS" );
@@ -34,9 +39,9 @@ int main() {
     _soundLoader.addSource( "MICROFONE" );
     _soundLoader.addSource( "RADIO" );
 
-    _soundLoader.setSourceSounds( "EFFECTS", { "l", "4", "4" } );
+    _soundLoader.setSourceSounds( "EFFECTS", { "l", "4", "l" } );
 
-    _soundLoader.setSourceSounds( "RADIO", { "n", "t", "l" } );
+    _soundLoader.setSourceSounds( "RADIO", { "n", "l", "t" } );
     _soundLoader.setPitch( "RADIO", 0.75f );
     _soundLoader.setLoop( "RADIO", true );
     _soundLoader.play( "RADIO" );
@@ -47,8 +52,6 @@ int main() {
     bool secondStarted = false;
     while(true)
     {
-
-
         if( i > 60 && !secondStarted )
         {   std::cout << "i: " << i << std::endl;
             _soundLoader.play( "EFFECTS" );

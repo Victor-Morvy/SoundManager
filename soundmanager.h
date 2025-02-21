@@ -20,8 +20,8 @@ public:
     //with sources we can control a group of sounds to set if sound,
     //will be played in loop,
     void initialize( );
-    bool loadWavFile(const std::string& soundName, const std::string& filename);
-    bool loadWavFiles(const std::map<std::string, std::string> &audioFiles );
+    bool loadWavFile(const std::string& soundName, const std::string& filePath);
+    bool loadWavFiles(const std::map<std::string, std::string> &soundNameXFilePath );
     WavData* wavData( const std::string& soundName );
 
     DataSource* addSource( const std::string& sourceName );

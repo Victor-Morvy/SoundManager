@@ -44,7 +44,7 @@ SoundManager::initialize()
 
 // Função para carregar um arquivo WAV e criar um buffer OpenAL
 bool
-SoundManager::loadWavFile(const std::string &soundName, const std::string& filename ) {
+SoundManager::loadWavFile(const std::string &soundName, const std::string& filePath ) {
 
     if( !_initialized )
     {
@@ -57,9 +57,9 @@ SoundManager::loadWavFile(const std::string &soundName, const std::string& filen
     auto* wavData = _wavMap[soundName].get();
 
     //load file
-    std::ifstream file(filename, std::ios::binary);
+    std::ifstream file(filePath, std::ios::binary);
     if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo: " << filename << std::endl;
+        std::cerr << "Erro ao abrir o arquivo: " << filePath << std::endl;
         return false;
     }
 
@@ -145,9 +145,9 @@ SoundManager::loadWavFile(const std::string &soundName, const std::string& filen
     return true;
 }
 
-bool SoundManager::loadWavFiles(const std::map<std::string, std::string> &audioFiles)
+bool SoundManager::loadWavFiles(const std::map<std::string, std::string> &soundNameXFilePath)
 {
-    for (const auto& file : audioFiles) {
+    for (const auto& file : soundNameXFilePath) {
         if( loadWavFile( file.first, file.second) )
         {
             std::cout << "Áudio carregado: " << file.second << std::endl;
